@@ -1,3 +1,7 @@
+html{
+  scroll-behavior: smooth;
+}
+
 .container {
   margin-top: 4rem;
 }
@@ -8,6 +12,8 @@
   margin: 10px 0;
   background-color: #fff;
   max-width: 529px;
+  white-space: nowrap;
+  overflow: hidden;
   transition: all 0.2 ease-in-out;
   &:hover {
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.24);
@@ -24,5 +30,20 @@
 
   .card-inner {
     padding: 10px;
+  }
+}
+
+.no-hidden{
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  visibility: visible;
+}
+
+@media(max-width:570px){
+  .card{
+    img{
+      opacity: 1;
+    }
   }
 }
