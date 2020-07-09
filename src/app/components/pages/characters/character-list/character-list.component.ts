@@ -5,9 +5,12 @@ import {
 import {
   ActivatedRoute, NavigationEnd, ParamMap, Router,
 } from '@angular/router';
+
+import { filter, take } from 'rxjs/operators';
+
 import { Character } from '@shared/interfaces/character.interface';
 import { CharacterService } from '@shared/services/character.service';
-import { filter, take } from 'rxjs/operators';
+import { TrackHttpError } from '@shared/models/trackHttpError';
 
 type RequestInfo = {
   next: string;
@@ -82,8 +85,7 @@ export class CharacterListComponent implements OnInit {
 
   private getCharactersByQuery(): void {
     this.route.queryParams.pipe(take(1)).subscribe((params: ParamMap) => {
-      console.log('Params->', params);
-      this.query = params.q;
+      this.query = params['q'];
       this.getDataFromService();
     });
   }
@@ -100,6 +102,6 @@ export class CharacterListComponent implements OnInit {
         } else {
           this.characters = [];
         }
-      });
+      }, (error:TrackHttpError) => console.log((error.friendlyMessage)));
   }
 }
