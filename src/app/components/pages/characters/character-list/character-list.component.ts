@@ -3,7 +3,7 @@ import {
   Component, HostListener, Inject, OnInit,
 } from '@angular/core';
 import {
-  ActivatedRoute, NavigationEnd, ParamMap, Router,
+  ActivatedRoute, NavigationEnd, Router,
 } from '@angular/router';
 
 import { filter, take } from 'rxjs/operators';
@@ -83,8 +83,8 @@ export class CharacterListComponent implements OnInit {
   }
 
   private getCharactersByQuery(): void {
-    this.route.queryParams.pipe(take(1)).subscribe((params: ParamMap) => {
-      this.query = params.get('q');
+    this.route.queryParams.pipe(take(1)).subscribe((params) => {
+      this.query = params.q;
       this.getDataFromService();
     });
   }
