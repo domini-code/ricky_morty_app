@@ -3,7 +3,7 @@ import {
   Component, HostListener, Inject, OnInit,
 } from '@angular/core';
 import {
-  ActivatedRoute, NavigationEnd, ParamMap, Router,
+  ActivatedRoute, NavigationEnd, Router,
 } from '@angular/router';
 
 import { filter, take } from 'rxjs/operators';
@@ -39,7 +39,7 @@ export class CharacterListComponent implements OnInit {
   private showScrollHeight = 500;
 
   constructor(
-    @Inject(DOCUMENT) private document:Document,
+    @Inject(DOCUMENT) private document: Document,
     private characterSvc: CharacterService,
     private route: ActivatedRoute,
     private router: Router,
@@ -52,23 +52,22 @@ export class CharacterListComponent implements OnInit {
   }
 
   @HostListener('window:scroll', [])
-  onWindowScroll():void {
+  onWindowScroll(): void {
     const yOffSet = window.pageYOffset;
-    if ((yOffSet || this.document.documentElement.scrollTop || this.document.body.scrollTop) > this.showScrollHeight) {
-      this.showGoUpButton = true;
-    } else if (this.showGoUpButton && (yOffSet || this.document.documentElement.scrollTop || this.document.body.scrollTop) < this.hideScrollHeight) {
-      this.showGoUpButton = false;
-    }
+    const isOnBottom = (yOffSet || this.document.documentElement.scrollTop || this.document.body.scrollTop) > this.showScrollHeight;
+    const isOnTop = (yOffSet || this.document.documentElement.scrollTop || this.document.body.scrollTop) < this.hideScrollHeight;
+    this.showGoUpButton = isOnBottom;
+    this.showGoUpButton = Boolean(isOnTop) ? true : (this.showGoUpButton && isOnTop);
   }
 
-  onScrollDown():void{
+  onScrollDown(): void{
     if (this.info.next) {
       this.pageNum++;
       this.getDataFromService();
     }
   }
 
-  onScrollTop():void{
+  onScrollTop(): void{
     this.document.body.scrollTop = 0; // Safari
     this.document.documentElement.scrollTop = 0; // Other
   }
@@ -84,8 +83,8 @@ export class CharacterListComponent implements OnInit {
   }
 
   private getCharactersByQuery(): void {
-    this.route.queryParams.pipe(take(1)).subscribe((params: ParamMap) => {
-      this.query = params['q'];
+    this.route.queryParams.pipe(take(1)).subscribe((params) => {
+      this.query = params.q;
       this.getDataFromService();
     });
   }
@@ -102,6 +101,6 @@ export class CharacterListComponent implements OnInit {
         } else {
           this.characters = [];
         }
-      }, (error:TrackHttpError) => console.log((error.friendlyMessage)));
+      }, (error: TrackHttpError) => console.log((error.friendlyMessage)));
   }
 }
